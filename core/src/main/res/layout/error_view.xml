@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Error"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_try"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/purple_500"
+        android:visibility="gone"
+        android:text="@string/btn_try_text"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
