@@ -40,7 +40,7 @@ class FavoriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = "Game Favorit"
+        supportActionBar?.title = getString(R.string.title_favorite)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel = ViewModelProvider(this, ViewModelFactory(interactor))[FavoriteViewModel::class.java]
         with(binding) {

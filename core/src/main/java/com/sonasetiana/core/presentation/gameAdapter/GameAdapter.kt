@@ -14,8 +14,8 @@ class GameAdapter(
     private var items : ArrayList<Game> = ArrayList()
 
     fun set(newItems : List<Game>) {
-       items = ArrayList(newItems)
-       notifyDataSetChanged()
+        items = ArrayList(newItems)
+        notifyDataSetChanged()
     }
 
     fun addAll(newItems : List<Game>) {

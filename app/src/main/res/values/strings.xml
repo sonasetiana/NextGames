@@ -4,4 +4,5 @@
     <string name="empty_games">Tidak ada data game untuk saat ini</string>
     <string name="search">Cari Games</string>
     <string name="txt_splash">Next Games.</string>
+    <string name="button_add_favorite">Button Add Favorite</string>
 </resources>

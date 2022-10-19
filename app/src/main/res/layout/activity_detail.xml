@@ -77,7 +77,7 @@
                     android:gravity="center_vertical"
                     android:drawablePadding="@dimen/spacing_small"
                     android:drawableStart="@drawable/ic_round_star_24"
-                    android:drawableTint="@color/yellow"/>
+                    app:drawableTint="@color/yellow"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -103,7 +103,8 @@
             app:fabSize="mini"
             app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="bottom|end"
-            app:srcCompat="@drawable/ic_favorite_inactive" />
+            app:srcCompat="@drawable/ic_favorite_inactive"
+            android:contentDescription="@string/button_add_favorite"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

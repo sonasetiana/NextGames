@@ -11,8 +11,7 @@
         android:id="@+id/txt_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Error"/>
+        android:gravity="center"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_try"

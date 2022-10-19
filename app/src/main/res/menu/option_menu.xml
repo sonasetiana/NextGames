@@ -6,12 +6,11 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="collapseActionView|always" />
+        app:showAsAction="collapseActionView|ifRoom" />
     <group android:menuCategory="container">
         <item android:id="@+id/favorite"
             android:title="@string/title_favorite"
             android:icon = "@drawable/ic_favorite"
-            android:iconTint="@color/white"
-            app:showAsAction="always" />
+            app:showAsAction="ifRoom" />
     </group>
 </menu>
