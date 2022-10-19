@@ -1,9 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'com.google.dagger.hilt.android'
+    id 'kotlin-kapt'
 }
 
 apply {
@@ -11,6 +11,15 @@ apply {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('../nextgame.jks')
+            keyAlias = 'nextgame'
+            storePassword 'nextgames007'
+            keyPassword 'nextgames007'
+        }
+    }
+
     compileSdk 32
 
     defaultConfig {
@@ -26,7 +35,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
