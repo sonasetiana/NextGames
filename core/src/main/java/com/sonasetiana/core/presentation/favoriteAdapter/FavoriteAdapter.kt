@@ -2,6 +2,8 @@ package com.sonasetiana.core.presentation.favoriteAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sonasetiana.core.databinding.ItemFavoriteBinding
@@ -9,14 +11,7 @@ import com.sonasetiana.core.domain.data.Favorite
 
 class FavoriteAdapter(
     private val callback: FavoriteAdapterCallback? = null,
-) : RecyclerView.Adapter<FavoriteAdapter.Holder>(){
-
-    private var items : ArrayList<Favorite> = ArrayList()
-
-    fun set(newItems : List<Favorite>) {
-        items = ArrayList(newItems)
-        notifyDataSetChanged()
-    }
+) : ListAdapter<Favorite, FavoriteAdapter.Holder>(DIFF_CALLBACK){
 
     inner class Holder(
         private val binding: ItemFavoriteBinding
@@ -42,8 +37,19 @@ class FavoriteAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(items[position])
+        val favorite = getItem(position)
+        holder.bind(favorite)
     }
 
-    override fun getItemCount(): Int = items.size
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Favorite>() {
+            override fun areItemsTheSame(oldItem: Favorite, newItem: Favorite): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: Favorite, newItem: Favorite): Boolean {
+                return oldItem.gameId == newItem.gameId
+            }
+        }
+    }
 }

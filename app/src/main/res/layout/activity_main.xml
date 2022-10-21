@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_refresh"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,55 +8,35 @@
     android:layout_height="match_parent"
     tools:context=".presentation.main.MainActivity">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested_scroll"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/container_list"
-                android:orientation="vertical"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_games"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                android:nestedScrollingEnabled="false"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_games"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
-                    android:nestedScrollingEnabled="false"/>
+            <include
+                android:id="@+id/view_error"
+                layout="@layout/error_view"
+                android:visibility="gone"/>
 
-                <androidx.core.widget.ContentLoadingProgressBar
-                    android:id="@+id/loading_more"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    style="@style/Widget.AppCompat.ProgressBar"
-                    android:layout_gravity="center"
-                    android:indeterminateTint="@color/purple_500"
-                    android:layout_margin="@dimen/spacing_medium"
-                    android:visibility="gone"/>
+            <include
+                android:id="@+id/loading"
+                layout="@layout/loading_view"
+                android:visibility="visible"/>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+        </FrameLayout>
 
-        </androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-    <include
-        android:id="@+id/view_error"
-        layout="@layout/error_view"
-        android:visibility="gone"/>
-
-    <include
-        android:id="@+id/loading"
-        layout="@layout/loading_view"/>
-
-</FrameLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -1,5 +1,6 @@
 package com.sonasetiana.core.domain.usecase
 
+import androidx.paging.PagingData
 import com.sonasetiana.core.data.model.Results
 import com.sonasetiana.core.domain.data.DataMapper
 import com.sonasetiana.core.domain.data.Favorite
@@ -12,9 +13,9 @@ import javax.inject.Inject
 class GameInteractor @Inject constructor(
     private val repository: GameRepository
 ): GameUseCase{
-    override fun getAllGames(limit: Int, page: Int): Flowable<Results<List<Game>>> = repository.getAllGames(limit, page)
+    override fun getAllGames(): Flowable<PagingData<Game>> = repository.getAllGames()
 
-    override fun searchGames(keyword: String): Flowable<Results<List<Game>>> = repository.searchGames(keyword)
+    override fun searchGames(keyword: String): Flowable<PagingData<Game>> = repository.searchGames(keyword)
 
     override fun getDetailGame(id: Int): Flowable<Results<GameDetail>> = repository.getDetailGame(id)
 

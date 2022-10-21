@@ -2,6 +2,8 @@ package com.sonasetiana.core.presentation.gameAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sonasetiana.core.databinding.ItemGameBinding
@@ -9,19 +11,7 @@ import com.sonasetiana.core.domain.data.Game
 
 class GameAdapter(
     private val callback: ((Int) -> Unit)? = null
-) : RecyclerView.Adapter<GameAdapter.Holder>(){
-
-    private var items : ArrayList<Game> = ArrayList()
-
-    fun set(newItems : List<Game>) {
-        items = ArrayList(newItems)
-        notifyDataSetChanged()
-    }
-
-    fun addAll(newItems : List<Game>) {
-        items.addAll(newItems)
-        notifyDataSetChanged()
-    }
+) : PagingDataAdapter<Game, GameAdapter.Holder>(DIFF_CALLBACK){
 
     inner class Holder(
         private val binding: ItemGameBinding
@@ -44,8 +34,19 @@ class GameAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(items[position])
+        getItem(position)?.let { holder.bind(it) }
     }
 
-    override fun getItemCount(): Int = items.size
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Game>() {
+            override fun areItemsTheSame(oldItem: Game, newItem: Game): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: Game, newItem: Game): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
+    }
 }

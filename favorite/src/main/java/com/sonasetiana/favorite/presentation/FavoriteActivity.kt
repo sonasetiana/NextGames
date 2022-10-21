@@ -1,7 +1,6 @@
 package com.sonasetiana.favorite.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -101,8 +100,7 @@ class FavoriteActivity : AppCompatActivity() {
                 if (it.isEmpty()) {
                     setErrorView(getString(R.string.empty_favorite))
                 }else {
-                    Log.d("TAG_FAVORITE", "getFavorites: ${it.size}")
-                    favoriteAdapter.set(it)
+                    favoriteAdapter.submitList(it)
                     rvFavorite.visible()
                 }
             }

@@ -10,11 +10,12 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.paging.LoadState
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
+import com.sonasetiana.core.data.remote.models.toApiError
 import com.sonasetiana.core.presentation.gameAdapter.GameAdapter
-import com.sonasetiana.core.utils.EndlessScrollCallback
+import com.sonasetiana.core.presentation.loadingAdapter.LoadingMoreAdapter
 import com.sonasetiana.core.utils.gone
-import com.sonasetiana.core.utils.onScroll
 import com.sonasetiana.core.utils.visible
 import com.sonasetiana.nextgames.R
 import com.sonasetiana.nextgames.databinding.ActivityMainBinding
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         with(binding) {
             setupView()
-            observeViewModel()
+            getGames()
         }
     }
 
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                 it.toString().lowercase()
             }
             .subscribe {
-                viewModel.searchGame(it)
+                searchGame(it)
                 searchView.clearFocus()
             }
         compositeDisposable.add(disposable)
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean = true
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                viewModel.getGames()
+                getGames()
                 return true
             }
 
@@ -96,18 +97,47 @@ class MainActivity : AppCompatActivity() {
         gameAdapter = GameAdapter{
             DetailActivity.open(this@MainActivity, it)
         }
-        nestedScroll.onScroll(object : EndlessScrollCallback {
-            override fun onReachBottom() {
-                viewModel.getMoreGames()
+
+        gameAdapter.addLoadStateListener {
+            when (it.source.refresh) {
+                is LoadState.Loading -> {
+                    viewError.root.gone()
+                    rvGames.gone()
+                    loading.root.visible()
+                }
+                is LoadState.NotLoading -> {
+                    loading.root.gone()
+                    rvGames.visible()
+                }
+                is LoadState.Error -> {
+                    loading.root.gone()
+                    val err = it.source.refresh as? LoadState.Error
+                    err?.let {  t ->
+                        setErrorView(t.error.toApiError().message.orEmpty())
+                    }
+                }
             }
-        })
+        }
+
         with(rvGames) {
-            adapter = gameAdapter
+            adapter = gameAdapter.withLoadStateFooter(footer = LoadingMoreAdapter())
             setHasFixedSize(true)
         }
         swipeRefresh.setOnRefreshListener {
             swipeRefresh.isRefreshing = false
             viewModel.getGames()
+        }
+    }
+
+    private fun getGames() {
+        viewModel.getGames().observe(this@MainActivity) {
+            gameAdapter.submitData(lifecycle, it)
+        }
+    }
+
+    private fun searchGame(keyword: String) {
+        viewModel.searchGame(keyword).observe(this@MainActivity) {
+            gameAdapter.submitData(lifecycle, it)
         }
     }
 
@@ -117,58 +147,5 @@ class MainActivity : AppCompatActivity() {
             txtMessage.text = message
         }
     }
-
-    private fun ActivityMainBinding.observeViewModel() {
-        with(viewModel){
-            getIsLoading().observe(this@MainActivity) {
-                if (it) {
-                    loading.root.visible()
-                    viewError.root.gone()
-                    containerList.gone()
-                }else {
-                    loading.root.gone()
-                }
-            }
-            successGetGames().observe(this@MainActivity) {
-                if (it.isEmpty()) {
-                    setErrorView(getString(R.string.empty_games))
-                } else {
-                    gameAdapter.set(it)
-                    containerList.visible()
-                }
-            }
-            errorGetGames().observe(this@MainActivity) {
-                setErrorView(it)
-            }
-            loadingSearchGame().observe(this@MainActivity) {
-                if (it) {
-                    loading.root.visible()
-                    viewError.root.gone()
-                    containerList.gone()
-                }else {
-                    loading.root.gone()
-                }
-            }
-            successSearchGame().observe(this@MainActivity) {
-                if (it.isEmpty()) {
-                    setErrorView(getString(R.string.empty_games))
-                } else {
-                    gameAdapter.set(it)
-                    containerList.visible()
-                }
-            }
-            errorSearchGame().observe(this@MainActivity) {
-                setErrorView(it)
-            }
-            loadingGetMoreGames().observe(this@MainActivity) {
-                if (it) loadingMore.visible() else loadingMore.gone()
-            }
-            successGetMoreGames().observe(this@MainActivity) {
-                gameAdapter.addAll(it)
-            }
-            getGames()
-        }
-    }
-
 
 }
