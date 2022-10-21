@@ -20,7 +20,6 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/purple_500"
-        android:visibility="gone"
         android:text="@string/btn_try_text"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

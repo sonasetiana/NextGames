@@ -36,6 +36,10 @@ class MainActivity : AppCompatActivity() {
 
     private val compositeDisposable = CompositeDisposable()
 
+    private var keyword: String = ""
+
+    private var isRequestSearching: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -63,15 +67,20 @@ class MainActivity : AppCompatActivity() {
                 it.toString().lowercase()
             }
             .subscribe {
-                searchGame(it)
+                keyword = it
+                searchGame()
                 searchView.clearFocus()
             }
         compositeDisposable.add(disposable)
 
         menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean = true
+            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                isRequestSearching = true
+                return true
+            }
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                isRequestSearching = false
                 getGames()
                 return true
             }
@@ -125,7 +134,18 @@ class MainActivity : AppCompatActivity() {
         }
         swipeRefresh.setOnRefreshListener {
             swipeRefresh.isRefreshing = false
-            viewModel.getGames()
+            refresh()
+        }
+        viewError.btnTry.setOnClickListener {
+            refresh()
+        }
+    }
+
+    private fun refresh() {
+        if (isRequestSearching) {
+            searchGame()
+        } else {
+            getGames()
         }
     }
 
@@ -135,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun searchGame(keyword: String) {
+    private fun searchGame() {
         viewModel.searchGame(keyword).observe(this@MainActivity) {
             gameAdapter.submitData(lifecycle, it)
         }

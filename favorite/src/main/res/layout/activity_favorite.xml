@@ -20,7 +20,6 @@
         layout="@layout/error_view"
         android:visibility="gone"/>
 
-
     <include
         android:id="@+id/loading"
         layout="@layout/loading_view"/>

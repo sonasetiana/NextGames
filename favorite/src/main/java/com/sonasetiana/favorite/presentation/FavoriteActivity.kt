@@ -50,7 +50,7 @@ class FavoriteActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getFavorites()
+        getFavorites()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -75,6 +75,13 @@ class FavoriteActivity : AppCompatActivity() {
             setHasFixedSize(true)
             adapter = favoriteAdapter
         }
+        viewError.btnTry.setOnClickListener {
+            getFavorites()
+        }
+    }
+
+    private fun getFavorites() {
+        viewModel.getFavorites()
     }
 
     private fun ActivityFavoriteBinding.setErrorView(message: String) {

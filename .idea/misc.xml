@@ -21,6 +21,7 @@
         <entry key="core/src/main/res/layout/error_view.xml" value="0.33" />
         <entry key="core/src/main/res/layout/item_favorite.xml" value="0.28229166666666666" />
         <entry key="core/src/main/res/layout/item_game.xml" value="0.28229166666666666" />
+        <entry key="core/src/main/res/layout/item_loading.xml" value="0.28125" />
         <entry key="core/src/main/res/layout/loading_view.xml" value="0.28125" />
         <entry key="favorite/src/main/res/layout/activity_favorite.xml" value="0.28229166666666666" />
         <entry key="favorite/src/main/res/layout/fragment_favorite.xml" value="0.28229166666666666" />

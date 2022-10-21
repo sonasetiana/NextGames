@@ -8,6 +8,7 @@ import com.sonasetiana.core.domain.data.Game
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.SingleSubject
 
 class SearchGamePagingDataSource(
     private val remote: RemoteDataSource,
@@ -25,18 +26,27 @@ class SearchGamePagingDataSource(
     }
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, Game>> {
+        val result = SingleSubject.create<LoadResult<Int, Game>>()
         val page = params.key ?: INITIAL_PAGE_INDEX
-        return remote.searchGames(keyword)
+
+        remote.searchGames(keyword)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { data -> data.results.map { DataMapper.mappingGameData(it)} }
-            .map {
-                LoadResult.Page(
-                    data = it,
-                    prevKey = if (page == INITIAL_PAGE_INDEX) null else page - 1,
-                    nextKey = if (it.isEmpty()) null else page + 1
+            .take(1)
+            .map { it.results.map { i -> DataMapper.mappingGameData(i) } }
+            .subscribe({
+                result.onSuccess(
+                    LoadResult.Page(
+                        data = it,
+                        prevKey = if (page == INITIAL_PAGE_INDEX) null else page - 1,
+                        nextKey = if (it.isEmpty()) null else page + 1
+                    )
                 )
-            }
+
+            }, { err ->
+                result.onSuccess(LoadResult.Error(err))
+            })
+        return result
     }
 
 }
